@@ -1,68 +1,47 @@
 # Fulcrum
 
-**Provably-bounded governance for autonomous AI agents.**
+**Pre-execution governance for AI agent tool calls — with receipts you can check.**
 
-Microsoft's Agent Governance Toolkit ships 13,000 tests. We ship zero-sorry mechanized Lean 4 proofs that bound the same governance invariants. When an audit demands evidence, the difference is admissible.
-
----
-
-## The four-repo open-core stack
-
-| Repo | Layer | Wedge | License |
-|------|-------|-------|---------|
-| **[fulcrum-io](https://github.com/Fulcrum-Governance/fulcrum-io)** | Runtime control plane | Policy engine, execution envelope, MCP proxy, governance dashboard | BSL 1.1 → Apache 2.0 (2030-05-04) |
-| **[governance-interception-layer](https://github.com/Fulcrum-Governance/governance-interception-layer)** | Enforcement boundary | Protocol-agnostic adapters (MCP / CLI / code-exec), 4-stage pipeline | Apache 2.0 |
-| **[fulcrum-trust](https://github.com/Fulcrum-Governance/fulcrum-trust)** | Trust engine | Beta(α,β) circuit breaker, runaway-loop termination, agent-pair trust state | Apache 2.0 |
-| **[Fulcrum-Proofs](https://github.com/Fulcrum-Governance/Fulcrum-Proofs)** | Formal core | Lean 4 mechanized proofs, claim ledger, kernel-3 axiom profile, 0 sorrys | MIT |
+An agent proposes an action. [Fulcrum Boundary](https://github.com/Fulcrum-Governance/Fulcrum-Boundary) decides — allow, deny, warn, escalate, or require approval — *before* the tool runs, records a hash-verifiable decision, and only then lets execution proceed. Routed-only by design: Boundary governs the routes forced through it, and its docs say exactly what that does and does not cover.
 
 ---
 
-## Why this exists
+## Start here: Fulcrum Boundary
 
-In April 2026 alone — Microsoft, OpenAI, Cisco, and Palo Alto Networks each shipped or acquired into agent governance. Every one of them picked the orchestration layer. None picked formal verification.
+```bash
+brew install fulcrum-governance/tap/boundary
+boundary demo github-lethal-trifecta   # watch a write-after-taint action denied before upstream
+boundary demo tamper-evidence          # forge the receipt; watch verification refuse it
+```
 
-The category has been validated. The proof primitive remains open.
+Also ships as [release binaries](https://github.com/Fulcrum-Governance/Fulcrum-Boundary/releases/latest) with checksums, `docker pull ghcr.io/fulcrum-governance/boundary`, and `go install`. Demos are fixture-only: no credentials, no live calls, no real mutations.
 
-Fulcrum is the deployer-side primitive that the orchestrators explicitly punt to. We're protocol-agnostic (MCP + CLI + code-exec adapters), evidence-grade (machine-checkable Lean 4 theorems with documented axiom profile), and decision-named (every action returns one of: *proved* / *deterministic* / *classified* / *human-approved*).
+- **Deterministic verdict path.** No model decides allow/deny locally; semantic rules escalate to a human or upstream system instead of guessing.
+- **Records verifiable outside Boundary.** Decision records hash canonical bytes per RFC 8785 (JCS), scoped to the record — a stock RFC 8785 implementation recomputes the same `decision_hash`. That is a record-level statement, not a claim that Boundary as a whole is standards-conformant, and the hashes are integrity, not authenticity.
+- **Honesty enforced by the build.** A machine-readable claims ledger and a public-language lint fail the build on overclaim. Clone it and run `go test ./claims/... -count=1` yourself.
 
----
+## The Fulcrum stack
 
-## Three-layer license posture
+| Repo | Layer | License |
+|------|-------|---------|
+| **[Fulcrum-Boundary](https://github.com/Fulcrum-Governance/Fulcrum-Boundary)** | The action boundary: pre-execution decisions for routed agent tool calls, decision records, policy-as-code testing | Apache 2.0 |
+| **[Fulcrum-Trust](https://github.com/Fulcrum-Governance/Fulcrum-Trust)** | Trust engine: Beta-distribution scoring, circuit breaker, agent trust state | Apache 2.0 |
+| **[Fulcrum-Proofs](https://github.com/Fulcrum-Governance/Fulcrum-Proofs)** | Formal core: Lean 4 mechanized proofs and the claim ledger | MIT |
+| **Fulcrum-IO** | Runtime control plane (commercial kernel: policy, budget, trust, escalation, audit) — private during build | BSL 1.1 |
 
-We're not "closed source." We're not "everything Apache." We're deliberate:
+The license posture is deliberate: the math is MIT (you cannot patent a theorem), the embeddable libraries are Apache 2.0 (enterprises need explicit patent grants in dependencies), and the hosted control plane is commercial. Boundary runs standalone with zero external dependencies; the kernel integration is opt-in.
 
-- **Layer 1 — math is foundational knowledge.** Lean 4 proofs are MIT. You can't patent a theorem; pretending otherwise is bad-faith open source.
-- **Layer 2 — implementation libraries embed in your stack.** Trust SDK and the enforcement boundary are Apache 2.0. Enterprise legal teams require explicit patent grants when they install a dependency.
-- **Layer 3 — runtime control plane is a commercial product.** fulcrum-io ships under BSL 1.1 with an explicit conversion date (May 4, 2030) to Apache 2.0. AWS doesn't get to fork-and-host us during the build phase; the OSS narrative remains intact via the conversion clause.
+## Where the proofs stop
 
-This posture mirrors AWS Cedar (Apache 2.0 verifier + commercial managed service), MongoDB / Sentry / CockroachDB / Elastic / HashiCorp BSL precedents (commercial runtime + scheduled OSS conversion), and the Lean / Mathlib / Coq cultural norm of always-open formal cores.
-
----
-
-## Latest
-
-- **D4 preprint** — *Provably-Bounded Governance Invariants for Autonomous AI Agents* — [PDF](https://fulcrumlayer.io/papers/d4.pdf) · arXiv submission pending endorsement · Zenodo DOI to follow on first tagged release.
-- **GIL** — protocol-agnostic enforcement boundary, 241 tests, 98.2% coverage, Apache 2.0.
-- **Fulcrum-Proofs** — kernel-3 axiom profile, 0 sorrys repo-wide, 18+ theorems mapped to runtime invariants, MIT.
-- **fulcrum-trust** — Beta(α,β) trust engine on PyPI, 186 tests, 95.65% coverage.
-
----
-
-## Use Fulcrum
-
-- **Try it**: [docs.fulcrumlayer.io](https://docs.fulcrumlayer.io)
-- **Read the proofs**: [Fulcrum-Proofs](https://github.com/Fulcrum-Governance/Fulcrum-Proofs) → run `bash proofs/reproduce.sh`
-- **Web**: [fulcrumlayer.io](https://fulcrumlayer.io)
-
----
+[Fulcrum-Proofs](https://github.com/Fulcrum-Governance/Fulcrum-Proofs) contains mechanized Lean 4 theorems, and Boundary consumes proof-backed contracts — but Boundary never emits a `proved` decision, and a passing record check does not prove an action was executed or prevented. The boundary between what is proved and what is asserted is documented, tested, and linted: [PROOF_BOUNDARY](https://github.com/Fulcrum-Governance/Fulcrum-Boundary/blob/main/docs/PROOF_BOUNDARY.md) · [What It Does Not Prove](https://github.com/Fulcrum-Governance/Fulcrum-Boundary/blob/main/LIMITATIONS.md) · [How we keep ourselves honest](https://github.com/Fulcrum-Governance/Fulcrum-Boundary/blob/main/docs/HOW_WE_KEEP_OURSELVES_HONEST.md).
 
 ## Get involved
 
-- **Issues + discussion**: open on the relevant repo
-- **Security**: see [SECURITY.md](https://github.com/Fulcrum-Governance/.github/blob/main/SECURITY.md) — 90-day coordinated disclosure
-- **Code of Conduct**: see [CODE_OF_CONDUCT.md](https://github.com/Fulcrum-Governance/.github/blob/main/CODE_OF_CONDUCT.md) — Contributor Covenant 2.1
-- **Support**: see [SUPPORT.md](https://github.com/Fulcrum-Governance/.github/blob/main/SUPPORT.md)
+- **Discussions**: [Fulcrum-Boundary Discussions](https://github.com/Fulcrum-Governance/Fulcrum-Boundary/discussions) · issues on the relevant repo
+- **Security**: [SECURITY.md](https://github.com/Fulcrum-Governance/.github/blob/main/SECURITY.md) — coordinated disclosure
+- **Conduct**: [CODE_OF_CONDUCT.md](https://github.com/Fulcrum-Governance/.github/blob/main/CODE_OF_CONDUCT.md) · **Support**: [SUPPORT.md](https://github.com/Fulcrum-Governance/.github/blob/main/SUPPORT.md)
+- **Web**: [fulcrumlayer.io](https://fulcrumlayer.io) · [docs.fulcrumlayer.io](https://docs.fulcrumlayer.io)
 
 ---
 
-*Anthony Diefenbach, founder · Y Combinator S2026 applicant.*
+*Anthony Diefenbach, founder.*
