@@ -25,15 +25,14 @@ Also ships as [release binaries](https://github.com/Fulcrum-Governance/Fulcrum-B
 | Repo | Layer | License |
 |------|-------|---------|
 | **[Fulcrum-Boundary](https://github.com/Fulcrum-Governance/Fulcrum-Boundary)** | The action boundary: pre-execution decisions for routed agent tool calls, decision records, policy-as-code testing | Apache 2.0 |
-| **[Fulcrum-Trust](https://github.com/Fulcrum-Governance/Fulcrum-Trust)** | Trust engine: Beta-distribution scoring, circuit breaker, agent trust state | Apache 2.0 |
-| **[Fulcrum-Proofs](https://github.com/Fulcrum-Governance/Fulcrum-Proofs)** | Formal core: Lean 4 mechanized proofs and the claim ledger | MIT |
+| **Fulcrum-Trust** · **Fulcrum-Proofs** | Trust-modeling and Lean proof work are private during build; the Lean sources Boundary cites are in Fulcrum-Boundary [docs/proofs/](https://github.com/Fulcrum-Governance/Fulcrum-Boundary/tree/main/docs/proofs) | Apache 2.0 · MIT |
 | **Fulcrum-IO** | Runtime control plane (commercial kernel: policy, budget, trust, escalation, audit) — private during build | BSL 1.1 |
 
 The license posture is deliberate: the math is MIT (you cannot patent a theorem), the embeddable libraries are Apache 2.0 (enterprises need explicit patent grants in dependencies), and the hosted control plane is commercial. Boundary runs standalone with zero external dependencies; the kernel integration is opt-in.
 
 ## Where the proofs stop
 
-[Fulcrum-Proofs](https://github.com/Fulcrum-Governance/Fulcrum-Proofs) contains mechanized Lean 4 theorems, and Boundary consumes proof-backed contracts — but Boundary never emits a `proved` decision, and a passing record check does not prove an action was executed or prevented. The boundary between what is proved and what is asserted is documented, tested, and linted: [PROOF_BOUNDARY](https://github.com/Fulcrum-Governance/Fulcrum-Boundary/blob/main/docs/PROOF_BOUNDARY.md) · [What It Does Not Prove](https://github.com/Fulcrum-Governance/Fulcrum-Boundary/blob/main/LIMITATIONS.md) · [How we keep ourselves honest](https://github.com/Fulcrum-Governance/Fulcrum-Boundary/blob/main/docs/HOW_WE_KEEP_OURSELVES_HONEST.md).
+Trust-modeling and Lean proof work are private during build; the Lean sources Boundary cites are in Fulcrum-Boundary [docs/proofs/](https://github.com/Fulcrum-Governance/Fulcrum-Boundary/tree/main/docs/proofs). Boundary consumes proof-backed contracts — but Boundary never emits a `proved` decision, and a passing record check does not prove an action was executed or prevented. The boundary between what is proved and what is asserted is documented, tested, and linted: [PROOF_BOUNDARY](https://github.com/Fulcrum-Governance/Fulcrum-Boundary/blob/main/docs/PROOF_BOUNDARY.md) · [What It Does Not Prove](https://github.com/Fulcrum-Governance/Fulcrum-Boundary/blob/main/LIMITATIONS.md) · [How we keep ourselves honest](https://github.com/Fulcrum-Governance/Fulcrum-Boundary/blob/main/docs/HOW_WE_KEEP_OURSELVES_HONEST.md).
 
 ## Get involved
 

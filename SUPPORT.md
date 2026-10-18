@@ -8,8 +8,7 @@ Open an issue on the **specific repo** the question relates to:
 
 - **Runtime, dashboard, MCP proxy, REST API** → [fulcrum-io/issues](https://github.com/Fulcrum-Governance/fulcrum-io/issues)
 - **Enforcement adapters (MCP / CLI / code-exec)** → [governance-interception-layer/issues](https://github.com/Fulcrum-Governance/governance-interception-layer/issues)
-- **Trust SDK or trust-engine math** → [fulcrum-trust/issues](https://github.com/Fulcrum-Governance/fulcrum-trust/issues)
-- **Lean 4 proofs, claim ledger, kernel-profile** → [Fulcrum-Proofs/issues](https://github.com/Fulcrum-Governance/Fulcrum-Proofs/issues)
+- **Trust SDK or trust-engine math; Lean 4 proofs, claim ledger, kernel-profile** → trust-modeling and Lean proof work are private during build; the Lean sources Boundary cites are in Fulcrum-Boundary [docs/proofs/](https://github.com/Fulcrum-Governance/Fulcrum-Boundary/tree/main/docs/proofs)
 
 Cross-repo or architecture-level questions: open in `fulcrum-io` and tag `discussion:cross-repo`.
 

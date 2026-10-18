@@ -17,8 +17,7 @@ This policy covers all four production repositories under the Fulcrum-Governance
 |------|---------|---------|
 | [fulcrum-io](https://github.com/Fulcrum-Governance/fulcrum-io) | BSL 1.1 | Runtime control plane (Go server, dashboard, MCP proxy) |
 | [governance-interception-layer](https://github.com/Fulcrum-Governance/governance-interception-layer) | Apache 2.0 | Enforcement boundary (Go) |
-| [fulcrum-trust](https://github.com/Fulcrum-Governance/fulcrum-trust) | Apache 2.0 | Trust engine (Python on PyPI + Go evaluator) |
-| [Fulcrum-Proofs](https://github.com/Fulcrum-Governance/Fulcrum-Proofs) | MIT | Lean 4 formal core |
+| fulcrum-trust · Fulcrum-Proofs | Apache 2.0 · MIT | Trust-modeling and Lean proof work are private during build; the Lean sources Boundary cites are in Fulcrum-Boundary [docs/proofs/](https://github.com/Fulcrum-Governance/Fulcrum-Boundary/tree/main/docs/proofs) |
 
 ### In scope
 - Code execution, privilege escalation, or sandbox bypass in `governance-interception-layer` adapters
