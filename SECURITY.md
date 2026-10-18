@@ -11,25 +11,24 @@ Do **not** open a public GitHub issue for a vulnerability report. Use email firs
 
 ## Scope
 
-This policy covers all four production repositories under the Fulcrum-Governance organization:
+This policy covers every repository under the Fulcrum-Governance organization, public or private.
 
 | Repo | License | Surface |
 |------|---------|---------|
-| [fulcrum-io](https://github.com/Fulcrum-Governance/fulcrum-io) | BSL 1.1 | Runtime control plane (Go server, dashboard, MCP proxy) |
-| [governance-interception-layer](https://github.com/Fulcrum-Governance/governance-interception-layer) | Apache 2.0 | Enforcement boundary (Go) |
-| [fulcrum-trust](https://github.com/Fulcrum-Governance/fulcrum-trust) | Apache 2.0 | Trust engine (Python on PyPI + Go evaluator) |
-| [Fulcrum-Proofs](https://github.com/Fulcrum-Governance/Fulcrum-Proofs) | MIT | Lean 4 formal core |
+| [Fulcrum-Boundary](https://github.com/Fulcrum-Governance/Fulcrum-Boundary) | Apache 2.0 | Action boundary: MCP proxy, adapters, decision records (includes the Lean sources in docs/proofs/) |
+| [homebrew-tap](https://github.com/Fulcrum-Governance/homebrew-tap) · [boundary-plugins](https://github.com/Fulcrum-Governance/boundary-plugins) | | Boundary install and plugin metadata |
+| Fulcrum-IO, Fulcrum-Trust, Fulcrum-Proofs (private during build) | BSL 1.1 · Apache 2.0 · MIT | Hosted control plane, trust engine (`fulcrum-trust` on PyPI), Lean proofs. Report by email. |
 
 ### In scope
-- Code execution, privilege escalation, or sandbox bypass in `governance-interception-layer` adapters
-- Authentication or authorization bypass in `fulcrum-io` REST or MCP surfaces
-- Trust-state corruption or replay vectors against `fulcrum-trust`
-- Soundness flaws in `Fulcrum-Proofs` (e.g., a theorem that does not actually establish what it claims, an unintended axiom dependency, or a kernel-profile drift not surfaced by `proofs/reproduce.sh`)
+- Code execution, privilege escalation, or bypass of a governed route in Fulcrum-Boundary adapters
+- Authentication or authorization bypass in Fulcrum's hosted REST or MCP surfaces
+- Trust-state corruption or replay vectors against the `fulcrum-trust` package
+- Soundness flaws in the Lean sources Boundary cites (docs/proofs/), e.g. a theorem that does not establish what its citation claims, or an unintended axiom dependency
 - Supply-chain compromise of vendored dependencies
 
 ### Out of scope (by design, not by neglect)
-- The **Isolation Axiom** in `Fulcrum-Proofs/proofs/lean/Proofs/RLMContracts.lean` is a deployment contract, not a runtime guarantee. Container-escape vulnerabilities in the kernel/hypervisor underneath the proof layer are out of scope here — please report those upstream (gVisor, Firecracker, Linux kernel).
-- The pure-Python sandbox in `fulcrum-trust` (RLMRuntime exec model) is documented as bypassable in `fulcrum-trust/SECURITY.md`. Standard CPython sandbox-escape techniques are not novel findings.
+- The **Isolation Axiom** in the Fulcrum-Proofs Lean sources (`RLMContracts.lean`) is a deployment contract, not a runtime guarantee. Container-escape vulnerabilities in the kernel/hypervisor underneath the proof layer are out of scope here — please report those upstream (gVisor, Firecracker, Linux kernel).
+- The pure-Python sandbox in `fulcrum-trust` (RLMRuntime exec model) is documented as bypassable. Standard CPython sandbox-escape techniques are not novel findings.
 - Theoretical attacks without a working proof-of-concept.
 - Vulnerabilities in third-party dependencies beyond our pinned versions — please report upstream first; we will track downstream fixes.
 
@@ -37,7 +36,7 @@ This policy covers all four production repositories under the Fulcrum-Governance
 
 We follow a **90-day coordinated disclosure** window:
 
-1. You report the issue privately to `agent@fulcrumlayer.io (subject prefix `[security]`)`.
+1. You report the issue privately to `agent@fulcrumlayer.io` with subject prefix `[security]`.
 2. We acknowledge within 5 business days.
 3. We investigate, validate, and prepare a fix.
 4. We agree on a disclosure date with you (typically the patch ship date).
@@ -57,4 +56,4 @@ Researchers who report valid vulnerabilities under this policy are credited in t
 
 ---
 
-*Policy last updated 2026-05-03.*
+*Policy last updated 2026-10-17.*
